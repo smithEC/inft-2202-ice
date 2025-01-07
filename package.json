@@ -1,0 +1,19 @@
+{
+  "name": "inft-2202-ice",
+  "version": "1.0.0",
+  "description": "ICE for inft-2202 by Connor Smith",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smithEC/inft-2202-ice.git"
+  },
+  "author": "Connor Smith",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smithEC/inft-2202-ice/issues"
+  },
+  "homepage": "https://github.com/smithEC/inft-2202-ice#readme"
+}
