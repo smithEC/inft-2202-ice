@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/smithEC/inft-2202-ice/issues"
   },
-  "homepage": "https://github.com/smithEC/inft-2202-ice#readme"
+  "homepage": "https://github.com/smithEC/inft-2202-ice#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  }
 }
