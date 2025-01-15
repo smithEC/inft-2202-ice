@@ -5,3 +5,13 @@
     Date: January 9, 2025
     Description: This is the general styling sheet
 */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  footer {
+    margin-top: auto;
+    text-align: center;
+  }
