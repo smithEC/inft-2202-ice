@@ -5,6 +5,10 @@
     Date: January 9, 2025
     Description: This is the create script
 */
+
+import Animal from './Animal.js';
+import AnimalService from './animal.mock.service.js';
+
 // Get the form
 document.getElementById("animal-form")
     .addEventListener("submit", submitAnimalForm);
@@ -19,20 +23,33 @@ function submitAnimalForm(event) {
     console.log(event);
 
     const eleMessageBox = document.getElementById("message-box");
+    const eleNameError = animalForm.name.nextElementSibling;
     const valid = validateAnimalForm(event.target);
 
     if (valid) {
-        const animalObject = {
+        const animalParams = {
             name: animalForm.name.value,
             breed: animalForm.breed.value,
             legs: animalForm.legs.value,
             eyes: animalForm.eyes.value,
             sound: animalForm.sound.value
-        }
+        };
 
-        console.log(animalObject);
-        animalForm.reset();
-        eleMessageBox.classList.add("d-none");
+        const animalObject = new Animal(animalParams);
+
+        console.log(animalObject.toString());
+
+        try {
+            AnimalService.createAnimal(animalObject);
+            animalForm.reset();
+            eleMessageBox.classList.add("d-none");
+            eleNameError.classList.add("d-none");
+            window.location.href="list.html";
+        }
+        catch (error) {
+            eleNameError.classList.remove("d-none");
+            eleNameError.textContent = error.message;
+        }
     } else {
         
         eleMessageBox.classList.remove("d-none");
