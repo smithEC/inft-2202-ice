@@ -28,7 +28,7 @@ AnimalService.prototype.createAnimal = function (animalObject) {
     if (animals.find(animal => animal.name === animalObject.name)) {
         throw new Error('That animal already exists!');
     }
-    animals.push(animalObject.toObject());
+    animals.push(animalObject);
     localStorage.setItem('animals', JSON.stringify(animals));
     return true;
 }

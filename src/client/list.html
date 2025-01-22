@@ -27,22 +27,39 @@
       </header>
 
       <!-- Text -->
-      <h1>List</h1>
-      <p>
-          This is the List section of my website.
-          <br>
-          This is a work in progress.
-      </p>
-
+      
+      
+      <!-- Table -->
+       <div class="container">
+        <h1>Animal List</h1>
+        <hr>
+        
+        <div id="message-box" class="alert alert-warning d-none">
+          There are no animals!
+        </div>
+        <table id="animal-list" class="table table-striped d-none">
+          <thead>
+            <tr>
+              <th>Owner</th>
+              <th>Details</th>
+              <th>Controls</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+       </div>
+      
+      
       <!-- Footer -->
       <footer class="footer">
         <div class="container">
+          <hr>
           <p>© <span id="copyright"></span> Connor Smith, Inc</p>
         </div>
       </footer>
 
       <!-- Scripts -->
       <script src="app/app.js"></script>
-      <script src="app/animals/search.js"></script>
+      <script src="app/animals/search.js" type="module"></script>
 </body>
 </html>

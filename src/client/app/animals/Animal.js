@@ -7,8 +7,8 @@
 */
 
 export default class Animal {
-    constructor({ name, breed, eyes, legs, sound }) {
-        this.id = crypto.randomUUID();
+    constructor({ id = null, name, breed, eyes, legs, sound }) {
+        this.id = id ?? crypto.randomUUID();
         // this.name = name;
         // this.breed = breed;
         // this.eyes = eyes;
@@ -19,20 +19,17 @@ export default class Animal {
     }
 
     toString() {
-        return `${this.name} is a ${this.breed} with ${this.eyes} eyes, ${this.legs} legs, and makes a ${this.sound} sound.`;
+        return `<em>${this.name}</em> is a <em>${this.breed}</em> with <em>${this.eyes}</em> eyes, <em>${this.legs}</em> legs, and makes a <em>${this.sound}</em> sound.`;
     }
 
-    toObject() {
+    toJSON() {
         return {
+            id: this.id,
             name: this.name,
             breed: this.breed,
             eyes: this.eyes,
             legs: this.legs,
             sound: this.sound
         };
-    }
-
-    toJSON() {
-        return JSON.stringify(this.toObject());
     }
 }
