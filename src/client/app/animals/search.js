@@ -45,9 +45,7 @@ function drawAnimalTable(animals) {
         eleDeleteIcon.classList.add('fa-solid', 'fa-times');
         eleDeleteBtn.append(eleDeleteIcon);
 
-        eleDeleteBtn.addEventListener('click', event => {
-            console.log(`Clicked with animal id: ${animal.id}`);
-        });
+        eleDeleteBtn.addEventListener('click', onDeleteClick(animal));
 
         eleButtonCell.append(eleDeleteBtn);
 
@@ -58,5 +56,24 @@ function drawAnimalTable(animals) {
         eleEditLink.append(eleEditIcon);
         eleEditLink.setAttribute('href', `add.html?id=${animal.id}`);
         eleButtonCell.append(eleEditLink);
+    }
+
+    function onDeleteClick(animal) {
+        return event => {
+            console.log(`Trying to delete animal with ID: ${animal.id}`)
+
+            try {
+                if (confirm("Are you sure you want to delete?")) {
+                    AnimalService.deleteAnimal(animal);
+                    window.location = 'list.html';
+                }
+            } catch (error) {
+                console.log(error);
+                eleMessageBox.classList.remove('d-none');
+                eleMessageBox.textContent = error.message;
+            }
+
+            
+        }
     }
 }

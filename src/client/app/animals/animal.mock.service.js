@@ -36,34 +36,43 @@ AnimalService.prototype.createAnimal = function (animalObject) {
 AnimalService.prototype.findAnimal = function(animalID) {
     const animals = this.listAnimals();
 
-    if (animals.find(animal => animal.id === animalID)) {
-        return animal;
-    }
-    else {
+    const animal = animals.find(a => a.id == animalID);
+
+    if (!animal) {
         throw new Error('That animal doesn\'t exist!');
     }
+
+    return animal;
 }
 
-AnimalService.prototype.updateAnimal = function(animalObject) {
+AnimalService.prototype.updateAnimal = function(animal) {
     const animals = this.listAnimals();
-    if (animals.find(animal => animal.name === animalObject.name)) {
-        localStorage.setItem(animal, animalObject);
-        return true;
+
+    const idx = animals.findIndex(a => a.id === animal.id);
+
+    if (idx === -1) {
+        throw new Error('That animal does not exist!');
     }
-    else {
-        throw new Error('That animal doesn\'t exist!');
-        return false;
-    }
+
+    animals[idx] = animal;
+
+    localStorage.setItem('animals', JSON.stringify(animals));
+
+    return true;
 }
 
-AnimalService.prototype.deleteAnimal = function(animalObject) {
+AnimalService.prototype.deleteAnimal = function(animal) {
     const animals = this.listAnimals();
-    if (animals.find(animal => animal.name === animalObject.name)) {
-        localStorage.removeItem(animalObject);
-        return true;
+
+    const idx = animals.findIndex(a => a.id === animal.id);
+
+    if (idx === -1) {
+        throw new Error('That animal does not exist!');
     }
-    else {
-        throw new Error('That animal doesn\'t exist!');
-        return false;
-    }
+
+    animals.splice(idx, 1);
+
+    localStorage.setItem('animals', JSON.stringify(animals));
+
+    return true;
 }

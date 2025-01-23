@@ -9,9 +9,42 @@
 import Animal from './Animal.js';
 import AnimalService from './animal.mock.service.js';
 
+const url = new URL(window.location);
+
+const searchedParams = url.searchParams;
+const editID = searchedParams.get('id');
+const isEditMode = editID ? true : false;
+
+if (isEditMode) {
+    setupEditForm();
+}
+else {
+
+}
+
 // Get the form
 document.getElementById("animal-form")
     .addEventListener("submit", submitAnimalForm);
+
+function setupEditForm() {
+    const eleHeading = document.querySelector('h1');
+    eleHeading.textContent = "Edit Existing Animal";
+
+    try {
+        const existingAnimal = AnimalService.findAnimal(editID);
+        const animalForm = document.getElementById('animal-form');
+
+        animalForm.name.value = existingAnimal.name;
+        animalForm.name.disabled = true;
+        animalForm.breed.value = existingAnimal.breed;
+        animalForm.legs.value = existingAnimal.legs;
+        animalForm.eyes.value = existingAnimal.eyes;
+        animalForm.sound.value = existingAnimal.sound;
+    } catch (error) {
+        window.location = 'list.html';
+        return;
+    }
+}
 
 /*
  * Reveive the submit event from the form
@@ -28,6 +61,7 @@ function submitAnimalForm(event) {
 
     if (valid) {
         const animalParams = {
+            id: editID,
             name: animalForm.name.value,
             breed: animalForm.breed.value,
             legs: animalForm.legs.value,
@@ -40,10 +74,12 @@ function submitAnimalForm(event) {
         console.log(animalObject.toString());
 
         try {
-            AnimalService.createAnimal(animalObject);
-            animalForm.reset();
-            eleMessageBox.classList.add("d-none");
-            eleNameError.classList.add("d-none");
+            if (isEditMode) {
+                AnimalService.updateAnimal(animalObject);
+            }
+            else {
+                AnimalService.createAnimal(animalObject);
+            }
             window.location.href="list.html";
         }
         catch (error) {
