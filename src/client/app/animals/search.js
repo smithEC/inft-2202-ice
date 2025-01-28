@@ -12,8 +12,80 @@ const eleMessageBox = document.getElementById("message-box");
 const eleTable = document.getElementById("animal-list");
 const eleTbody = eleTable.querySelector("tbody");
 
-const records = AnimalService.listAnimals();
+const url = new URL(window.location);
+const searchedParams = url.searchParams;
+const page = parseInt(searchedParams.get('page')?? 1);
+const perPage = parseInt(searchedParams.get('perPage') ?? 3);
+
+
+const records = AnimalService.listAnimals(page, perPage);
+
 toggleTableVisibility(records);
+
+function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
+    const elePaginationItems = elePaginationContainer.querySelector('ul.pagination');
+    elePaginationItems.replaceChildren();
+
+    console.log(currentPage, totalPages);
+    if (totalPages > 1) {
+        elePaginationContainer.classList.remove('d-none');
+    }
+    else {
+        elePaginationContainer.classList.add('d-none');
+    }
+
+    // Previous button
+    const elePrevItem = document.createElement('li');
+    elePrevItem.classList.add('page-item');
+    const elePrevLink = document.createElement('a');
+    elePrevLink.textContent = 'Previous';   
+    elePrevLink.setAttribute('href', `list.html?page=${currentPage-1}&perPage=${perPage}`);
+    elePrevLink.classList.add('page-link');
+
+    if (currentPage === 1) {
+        elePrevLink.setAttribute('disabled', true);
+        elePrevLink.classList.add('disabled');
+    }
+
+    elePrevItem.append(elePrevLink);
+    elePaginationItems.append(elePrevItem);     
+
+    // Numbered Buttons
+    for(let i = 1; i <= totalPages; i++) {
+        const elePageItem = document.createElement('li');
+
+        elePageItem.classList.add('page-item');
+        const elePageLink = document.createElement('a');
+        elePageLink.classList.add('page-link');
+
+        
+        if (currentPage === i) {
+            elePageLink.classList.add('active');
+        }
+
+        elePageLink.setAttribute('href', `list.html?page=${i}&perPage=${perPage}`);
+        elePageLink.textContent = i;
+
+        elePageItem.append(elePageLink);
+        elePaginationItems.append(elePageItem);
+    }
+
+    // Next button
+    const eleNextItem = document.createElement('li');
+    eleNextItem.classList.add('page-item');
+    const eleNextLink = document.createElement('a');
+    eleNextLink.textContent = 'Next';   
+    eleNextLink.setAttribute('href', `list.html?page=${currentPage+1}&perPage=${perPage}`);
+    eleNextLink.classList.add('page-link');
+
+    if (currentPage === totalPages) {
+        eleNextLink.setAttribute('disabled', true);
+        eleNextLink.classList.add('disabled');
+    }
+
+    eleNextItem.append(eleNextLink);
+    elePaginationItems.append(eleNextItem);  
+}
 
 function toggleTableVisibility(animals) {
     if (!animals.length) {
@@ -24,6 +96,10 @@ function toggleTableVisibility(animals) {
         eleMessageBox.classList.add('d-none');
         eleTable.classList.remove('d-none');
         drawAnimalTable(animals);
+
+        const elePaginationContainer = document.getElementById('pagination');
+        const totalPages = Math.ceil(AnimalService.getAnimalCount() / perPage);
+        drawPaginationLinks(elePaginationContainer, page, totalPages);
     }
 }
 
@@ -57,23 +133,33 @@ function drawAnimalTable(animals) {
         eleEditLink.setAttribute('href', `add.html?id=${animal.id}`);
         eleButtonCell.append(eleEditLink);
     }
+}
 
-    function onDeleteClick(animal) {
-        return event => {
-            console.log(`Trying to delete animal with ID: ${animal.id}`)
-
-            try {
-                if (confirm("Are you sure you want to delete?")) {
-                    AnimalService.deleteAnimal(animal);
-                    window.location = 'list.html';
-                }
-            } catch (error) {
-                console.log(error);
-                eleMessageBox.classList.remove('d-none');
-                eleMessageBox.textContent = error.message;
-            }
-
-            
+function onConfirm(animal) {
+    return event => {
+        try {
+            AnimalService.deleteAnimal(animal);
+            window.location = 'list.html';
+        } catch (error) {
+            console.log(error);
+            eleMessageBox.classList.remove('d-none');
+            eleMessageBox.textContent = error.message;
         }
+    }
+}
+
+function onShow(animal) {
+    return event => {
+        document.querySelector("#confirmation .btn-danger")
+            .addEventListener('click', onConfirm(animal));
+    }
+}
+
+function onDeleteClick(animal) {
+    return event => {
+        const eleModalWindow = document.getElementById('confirmationModal');
+        const modal = new bootstrap.Modal('#confirmationModal');
+        eleModalWindow.addEventListener('show.bs.modal', onShow(animal));
+        modal.show();
     }
 }

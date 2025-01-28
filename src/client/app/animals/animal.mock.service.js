@@ -16,9 +16,13 @@ function AnimalService() {
     }
 }
 
-AnimalService.prototype.listAnimals = function() {
+AnimalService.prototype.listAnimals = function(page = 1, perPage = 5) {
+    const first = (page-1) * perPage;
+    const last = first + perPage;
+
     const animals = JSON.parse(localStorage.getItem('animals'))
-        .map(animalParams => new Animal(animalParams));
+        .map(animalParams => new Animal(animalParams))
+        .slice(first, last);
 
     return animals;
 }
@@ -75,4 +79,10 @@ AnimalService.prototype.deleteAnimal = function(animal) {
     localStorage.setItem('animals', JSON.stringify(animals));
 
     return true;
+}
+
+
+AnimalService.prototype.getAnimalCount = function(page, perPage) {
+    return JSON.parse(localStorage.getItem('animals'))
+        .length;
 }
