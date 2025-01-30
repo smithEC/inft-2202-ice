@@ -16,7 +16,7 @@ function AnimalService() {
     }
 }
 
-AnimalService.prototype.listAnimals = function(page = 1, perPage = 5) {
+AnimalService.prototype.listAnimals = function(page = 1, perPage = 3) {
     const first = (page-1) * perPage;
     const last = first + perPage;
 
@@ -27,8 +27,13 @@ AnimalService.prototype.listAnimals = function(page = 1, perPage = 5) {
     return animals;
 }
 
+AnimalService.prototype.getAllAnimals = function() {
+    return JSON.parse(localStorage.getItem('animals'))
+        .map(animal => new Animal(animal));
+}
+
 AnimalService.prototype.createAnimal = function (animalObject) {
-    const animals = this.listAnimals();
+    const animals = this.getAllAnimals();
     if (animals.find(animal => animal.name === animalObject.name)) {
         throw new Error('That animal already exists!');
     }
@@ -38,7 +43,7 @@ AnimalService.prototype.createAnimal = function (animalObject) {
 }
 
 AnimalService.prototype.findAnimal = function(animalID) {
-    const animals = this.listAnimals();
+    const animals = this.getAllAnimals();
 
     const animal = animals.find(a => a.id == animalID);
 
@@ -50,7 +55,7 @@ AnimalService.prototype.findAnimal = function(animalID) {
 }
 
 AnimalService.prototype.updateAnimal = function(animal) {
-    const animals = this.listAnimals();
+    const animals = this.getAllAnimals();
 
     const idx = animals.findIndex(a => a.id === animal.id);
 
@@ -66,7 +71,7 @@ AnimalService.prototype.updateAnimal = function(animal) {
 }
 
 AnimalService.prototype.deleteAnimal = function(animal) {
-    const animals = this.listAnimals();
+    const animals = this.getAllAnimals();
 
     const idx = animals.findIndex(a => a.id === animal.id);
 
