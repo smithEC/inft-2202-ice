@@ -87,7 +87,7 @@ AnimalService.prototype.deleteAnimal = function(animal) {
 }
 
 
-AnimalService.prototype.getAnimalCount = function(page, perPage) {
+AnimalService.prototype.getAnimalCount = function() {
     return JSON.parse(localStorage.getItem('animals'))
         .length;
 }
