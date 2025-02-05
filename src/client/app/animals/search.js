@@ -17,7 +17,6 @@ const searchedParams = url.searchParams;
 const page = parseInt(searchedParams.get('page')?? 1);
 const perPage = parseInt(searchedParams.get('perPage') ?? 3);
 
-
 const records = AnimalService.listAnimals(page, perPage);
 
 toggleTableVisibility(records);
@@ -87,7 +86,11 @@ function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     elePaginationItems.append(eleNextItem);  
 }
 
-function toggleTableVisibility(animals) {
+async function toggleTableVisibility(animals) {
+    const eleSpinIcon = document.getElementById('spin-icon');
+    await AnimalService.waitTho(3000);
+    eleSpinIcon.classList.add('d-none');
+
     if (!animals.length) {
         eleMessageBox.classList.remove('d-none');
         eleTable.classList.add('d-none');
@@ -136,9 +139,15 @@ function drawAnimalTable(animals) {
 }
 
 function onConfirm(animal) {
-    return event => {
+    return async event => {
         try {
             AnimalService.deleteAnimal(animal);
+
+            document.getElementById('x-icon').classList.add('d-none');
+            document.getElementById('spin-delete-icon').classList.remove('d-none');
+
+            await AnimalService.waitTho(3000);
+
             window.location = 'list.html';
         } catch (error) {
             console.log(error);
