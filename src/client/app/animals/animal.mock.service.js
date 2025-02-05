@@ -91,3 +91,7 @@ AnimalService.prototype.getAnimalCount = function() {
     return JSON.parse(localStorage.getItem('animals'))
         .length;
 }
+
+AnimalService.prototype.waitTho = function(timeout) {
+    return new Promise((resolve, reject) => setTimeout(resolve, timeout));
+}

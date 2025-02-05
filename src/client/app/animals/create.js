@@ -50,13 +50,15 @@ function setupEditForm() {
  * Reveive the submit event from the form
  */
 
-function submitAnimalForm(event) {
+async function submitAnimalForm(event) {
     event.preventDefault();
     const animalForm = event.target;
-    console.log(event);
 
     const eleMessageBox = document.getElementById("message-box");
     const eleNameError = animalForm.name.nextElementSibling;
+    const eleCheckIcon = document.getElementById('check-icon');
+    const eleSpinIcon = document.getElementById('spin-icon');
+
     const valid = validateAnimalForm(event.target);
 
     if (valid) {
@@ -72,7 +74,7 @@ function submitAnimalForm(event) {
         const animalObject = new Animal(animalParams);
 
         console.log(animalObject.toString());
-
+        
         try {
             if (isEditMode) {
                 AnimalService.updateAnimal(animalObject);
@@ -80,6 +82,19 @@ function submitAnimalForm(event) {
             else {
                 AnimalService.createAnimal(animalObject);
             }
+            eleCheckIcon.classList.add('d-none');
+            eleSpinIcon.classList.remove('d-none');
+
+            document.querySelector('button').disabled = true;
+            document.getElementById('name').disabled = true;
+            document.getElementById('sound').disabled = true;
+            document.getElementById('legs').disabled = true;
+            document.getElementById('eyes').disabled = true;
+            document.getElementById('breed').disabled = true;
+
+
+            await AnimalService.waitTho(3000);
+
             window.location.href="list.html";
         }
         catch (error) {
