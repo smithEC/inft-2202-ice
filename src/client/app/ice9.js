@@ -29,8 +29,8 @@ function xhrAnimals() {
         try {
             const response = event.target;
             const animals = JSON.parse(response.responseText);
-            console.log(animals);
-            // Draw animals table
+            const allAnimals = animals.map(a => new Animal(a));
+            toggleTableVisibility(allAnimals);
         } catch (error) {
             console.log(error)
         }
@@ -80,8 +80,10 @@ async function fetchAnimalsAsync() {
     }
 }
 
-function renderXhePage() {
-    xhrAnimals();
+function renderXhrPage() {
+    const data = xhrAnimals();
+    const allAnimals = data.map(a => new Animal(a));
+    toggleTableVisibility(allAnimals);
 }
 
 function renderSyncPage() {
@@ -108,7 +110,9 @@ const perPage = parseInt(searchedParams.get('perPage') ?? 3);
 
 const records = AnimalService.listAnimals(page, perPage);
 
-renderSyncPage();
+//renderSyncPage();
+//renderAsyncPage();
+xhrAnimals();
 
 function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     const elePaginationItems = elePaginationContainer.querySelector('ul.pagination');
