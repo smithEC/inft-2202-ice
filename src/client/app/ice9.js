@@ -93,6 +93,7 @@ function renderSyncPage() {
 async function renderAsyncPage() {
     const data = await fetchAnimalsAsync();
     const allAnimals = data.map(a => new Animal(a));
+    console.log(allAnimals);
     toggleTableVisibility(allAnimals);
 }
 
@@ -107,7 +108,7 @@ const perPage = parseInt(searchedParams.get('perPage') ?? 3);
 
 const records = AnimalService.listAnimals(page, perPage);
 
-toggleTableVisibility(records);
+renderSyncPage();
 
 function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     const elePaginationItems = elePaginationContainer.querySelector('ul.pagination');
