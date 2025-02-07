@@ -16,32 +16,22 @@ import AnimalService from './animals/animal.mock.service.js';
 function xhrAnimals() {
     const request = new XMLHttpRequest();
 
-    // request.addEventListener('readystatechange', event => {
-    //     const response = event.target;
-
-    //     if (response.readyState === 4) {
-    //         const animals = JSON.parse(response.responseText);
-    //         console.log(animals);
-    //     }
-    // });
-
     request.addEventListener('load', event => {
         try {
             const response = event.target;
             const animals = JSON.parse(response.responseText);
-            console.log(animals);
-            // Draw animals table
+            return animals;
         } catch (error) {
-            console.log(error)
+            console.log("ahhh", error)
         }
     });
 
-    request.open('GET', '/data/animals.json');
+    request.open('GET', 'data/animals.json');
     request.send();
 }
 
 function fetchAnimalsPromise() {
-    const url = new URL('/data/animals.json', window.location.origin);
+    const url = new URL('data/animals.json', window.location.origin);
     const headers = new Headers({
         'Content-Type': 'application/json'
     });
@@ -52,18 +42,18 @@ function fetchAnimalsPromise() {
     const request = new Request(url, options);
     const response = fetch(request);
 
-    console.log(response);
-
     return response
         .then(data => { return data.json() })
         .catch(error => { console.log(error) })
 }
 
 async function fetchAnimalsAsync() {
-    const url = new URL('/data/animals.json', window.location.origin);
+    const url = new URL("/data/animals.json", window.location.origin);
+    
     const headers = new Headers({
         'Content-Type': 'application/json'
     });
+
     const options = {
         method: 'GET',
         headers
@@ -76,18 +66,20 @@ async function fetchAnimalsAsync() {
         return body;
     }
     catch (error) {
-        console.log(error);
+        console.log("uh oh", error);
     }
 }
 
-function renderXhePage() {
-    xhrAnimals();
+function renderXhrPage() {
+    const data = xhrAnimals();
+    const allAnimals = data.map(a => new Animal(a));
+    toggleTableVisibility(allAnimals);
 }
 
 function renderSyncPage() {
     fetchAnimalsPromise()
         .then(data => data.map(a => new Animal(a)))
-        .then(toggleTableVisibility);
+        .then(toggleTableVisibility())
 }
 
 async function renderAsyncPage() {
@@ -107,7 +99,7 @@ const perPage = parseInt(searchedParams.get('perPage') ?? 3);
 
 const records = AnimalService.listAnimals(page, perPage);
 
-toggleTableVisibility(records);
+renderSyncPage();
 
 function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     const elePaginationItems = elePaginationContainer.querySelector('ul.pagination');
@@ -176,7 +168,7 @@ function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
 async function toggleTableVisibility(animals) {
     const eleSpinIcon = document.getElementById('spin-icon');
     await AnimalService.waitTho(1000);
-    eleSpinIcon.classList.add('d-none');
+    eleSpinIcon.classList.add('d-none'); 
 
     if (!animals.length) {
         eleMessageBox.classList.remove('d-none');
