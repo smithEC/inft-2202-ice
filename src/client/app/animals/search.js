@@ -6,7 +6,9 @@
     Description: This is the search script
 */
 
-import AnimalService from './animal.mock.service.js';
+// import AnimalService from './animal.mock.service.js';
+import AnimalService from './animal.service.js';
+
 
 const eleMessageBox = document.getElementById("message-box");
 const eleTable = document.getElementById("animal-list");
@@ -15,11 +17,12 @@ const eleTbody = eleTable.querySelector("tbody");
 const url = new URL(window.location);
 const searchedParams = url.searchParams;
 const page = parseInt(searchedParams.get('page')?? 1);
-const perPage = parseInt(searchedParams.get('perPage') ?? 3);
+const perPage = parseInt(searchedParams.get('perPage') ?? 10);
 
-const records = AnimalService.listAnimals(page, perPage);
+const response = await AnimalService.getAnimals(page, perPage);
+const myID = 100931463;
 
-toggleTableVisibility(records);
+toggleTableVisibility(response);
 
 function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     const elePaginationItems = elePaginationContainer.querySelector('ul.pagination');
@@ -86,23 +89,24 @@ function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     elePaginationItems.append(eleNextItem);  
 }
 
-async function toggleTableVisibility(animals) {
+async function toggleTableVisibility(response) {
     const eleSpinIcon = document.getElementById('spin-icon');
-    await AnimalService.waitTho(3000);
+    await AnimalService.waitTho(500);
     eleSpinIcon.classList.add('d-none');
 
-    if (!animals.length) {
+    const { pagination, records } = response;
+
+    if (!records.length) {
         eleMessageBox.classList.remove('d-none');
         eleTable.classList.add('d-none');
     }
     else {
         eleMessageBox.classList.add('d-none');
         eleTable.classList.remove('d-none');
-        drawAnimalTable(animals);
+        drawAnimalTable(records);
 
         const elePaginationContainer = document.getElementById('pagination');
-        const totalPages = Math.ceil(AnimalService.getAnimalCount() / perPage);
-        drawPaginationLinks(elePaginationContainer, page, totalPages);
+        drawPaginationLinks(elePaginationContainer, pagination.page, pagination.pages);
     }
 }
 
@@ -111,7 +115,7 @@ function drawAnimalTable(animals) {
         const row = eleTbody.insertRow();
 
         const eleNameCell = row.insertCell();
-        eleNameCell.textContent = "Connor";
+        eleNameCell.textContent = animal.owner.name;
 
         const eleDetailsCell = row.insertCell();
         eleDetailsCell.innerHTML = animal.toString();
@@ -126,15 +130,17 @@ function drawAnimalTable(animals) {
 
         eleDeleteBtn.addEventListener('click', onDeleteClick(animal));
 
-        eleButtonCell.append(eleDeleteBtn);
-
         const eleEditLink = document.createElement('a');
         eleEditLink.classList.add('btn', 'btn-primary', 'mx-1');
         const eleEditIcon = document.createElement('i');
         eleEditIcon.classList.add('fa-solid', 'fa-edit');
         eleEditLink.append(eleEditIcon);
         eleEditLink.setAttribute('href', `add.html?id=${animal.id}`);
-        eleButtonCell.append(eleEditLink);
+       
+       if (animal.owner.bannerId === myID) {
+            eleButtonCell.append(eleDeleteBtn);
+            eleButtonCell.append(eleEditLink);
+       }
     }
 }
 
