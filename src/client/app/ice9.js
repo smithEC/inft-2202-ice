@@ -85,6 +85,7 @@ function renderSyncPage() {
 async function renderAsyncPage() {
     const data = await fetchAnimalsAsync();
     const allAnimals = data.map(a => new Animal(a));
+    console.log(allAnimals);
     toggleTableVisibility(allAnimals);
 }
 
