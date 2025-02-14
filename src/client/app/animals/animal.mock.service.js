@@ -16,7 +16,7 @@ function AnimalService() {
     }
 }
 
-AnimalService.prototype.listAnimals = function(page = 1, perPage = 3) {
+AnimalService.prototype.listAnimals = function(page = 1, perPage = 10) {
     const first = (page-1) * perPage;
     const last = first + perPage;
 

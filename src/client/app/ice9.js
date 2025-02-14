@@ -20,7 +20,12 @@ function xhrAnimals() {
         try {
             const response = event.target;
             const animals = JSON.parse(response.responseText);
+<<<<<<< HEAD
             return animals;
+=======
+            const allAnimals = animals.map(a => new Animal(a));
+            toggleTableVisibility(allAnimals);
+>>>>>>> 87ff4904e31efedad9c9de0f083db6cb5d15e706
         } catch (error) {
             console.log("ahhh", error)
         }
@@ -100,7 +105,9 @@ const perPage = parseInt(searchedParams.get('perPage') ?? 3);
 
 const records = AnimalService.listAnimals(page, perPage);
 
-renderSyncPage();
+//renderSyncPage();
+//renderAsyncPage();
+xhrAnimals();
 
 function drawPaginationLinks(elePaginationContainer, currentPage, totalPages) {
     const elePaginationItems = elePaginationContainer.querySelector('ul.pagination');
