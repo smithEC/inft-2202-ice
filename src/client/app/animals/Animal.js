@@ -9,11 +9,6 @@
 export default class Animal {
     constructor({ id = null, name, breed, eyes, legs, sound, owner = null }) {
         this.id = id ?? crypto.randomUUID();
-        // this.name = name;
-        // this.breed = breed;
-        // this.eyes = eyes;
-        // this.legs = legs;
-        // this.sound = sound;
 
         Object.assign(this, { name, breed, eyes, legs, sound, owner });
     }
