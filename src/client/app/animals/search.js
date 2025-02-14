@@ -152,7 +152,7 @@ function onConfirm(animal) {
             document.getElementById('delete-button').disabled = true;
             
             await AnimalService.waitTho(3000);
-            AnimalService.deleteAnimal(animal);
+            await AnimalService.deleteAnimal(animal);
             
             window.location = 'list.html';
         } catch (error) {

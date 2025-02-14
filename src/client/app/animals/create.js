@@ -7,7 +7,7 @@
 */
 
 import Animal from './Animal.js';
-import AnimalService from './animal.mock.service.js';
+import AnimalService from './animal.service.js';
 
 const url = new URL(window.location);
 
@@ -16,7 +16,7 @@ const editID = searchedParams.get('id');
 const isEditMode = editID ? true : false;
 
 if (isEditMode) {
-    setupEditForm();
+    await setupEditForm();
 }
 else {
 
@@ -26,12 +26,12 @@ else {
 document.getElementById("animal-form")
     .addEventListener("submit", submitAnimalForm);
 
-function setupEditForm() {
+async function setupEditForm() {
     const eleHeading = document.querySelector('h1');
     eleHeading.textContent = "Edit Existing Animal";
 
     try {
-        const existingAnimal = AnimalService.findAnimal(editID);
+        const existingAnimal = await AnimalService.findAnimal(editID);
         const animalForm = document.getElementById('animal-form');
 
         animalForm.name.value = existingAnimal.name;
