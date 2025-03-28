@@ -1,35 +1,27 @@
 import express from 'express';
-
+import Animals from "../models/Animal.js";
+import { CheckValidation } from '../middleware/validation.js';
+import AnimalCreateController from "../controllers/animals/create.js";
+import AnimalRetrieveController from "../controllers/animals/retrieve.js";
+import AnimalUpdateController from "../controllers/animals/update.js";
+import AnimalDeleteController from "../controllers/animals/delete.js";
+import AnimalSearchController from "../controllers/animals/search.js";
 const router = express.Router();
 
 export default router;
 
-router.get('/animals', (req, res, next) => {
-    res.send('This is the animals list');
-});
 
-router.get(
-    '/animals/:animalID',
-    (req, res, next) => {
-        const { animalID } = req.params;
-        //throw new Error("Some bad happened");
-        const body = {
-            animalID,
-        }
-        res.json(body);
-    }   
-);
+router.get('/animals',AnimalSearchController.handle);
+// retrieve animal
+//router.get('/animals',AnimalRetrieveController.handle);
 
-router.post('/animals', (req, res, next) => {
-    res.send("Create animal");
-});
+router.get('/animals/:animalId',AnimalRetrieveController.handle);
+//import {validationResult} from 'express-validator'
+//create animal
+router.post('/animals',CheckValidation(AnimalCreateController.rules), AnimalCreateController.handle);
 
-router.put('/animals/:animalID', (req, res, next) => {
-    const { animalID } = req.params;
-    res.send(`Updated animal with id: ${animalID}`);
-});
+//update animal
+router.put('/animals/:animalId',CheckValidation(AnimalUpdateController.rules), AnimalUpdateController.handle);
 
-router.delete('/animals/:animalID', (req, res, next) => {
-    const { animalID } = req.params;
-    res.send(`Deleted animal with id: ${animalID}`);
-});
+//delete animal
+router.delete('/animals/:animalId',CheckValidation(AnimalDeleteController.rules), AnimalDeleteController.handle);
