@@ -51,12 +51,9 @@ class AnimalService{
         const options = {
             skip: (page - 1) * perPage,
             limit: perPage,
-            sort:{
-                createAt:-1
-            }
-        };
-
-
+            sort: { _id: 1 }
+          };
+          
         const records = await Animal.find(filters, fields,options);
         return{pagination, records}
     }

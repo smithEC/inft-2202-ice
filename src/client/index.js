@@ -9,10 +9,12 @@ import SearchPage from './app/components/search/search.js';
 import CreatePage from './app/components/create/create.js';
  
  
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+
 import './scss/styles.scss';
  
-const router = new Navigo('/');
+const router = new Navigo('/', { hash: true });
 window.addEventListener('load', () => {
  
 HeaderComponents();

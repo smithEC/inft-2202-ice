@@ -1,51 +1,83 @@
-<h1>Hello Search</h1>
-  <!-- Text -->
-  
-  
-  <!-- Table -->
-  <!-- <div class="container">
-    <h1>Animal List</h1>
-    <hr>
-    <i id="spin-icon" class="fa-solid fa-spinner fa-spin-pulse" style="font-size: 3em;"></i>
-    <div id="message-box" class="alert alert-warning d-none">
-      There are no animals in local storage
+<div class="container">
+  <h1>Animal Search</h1>
+  <hr>
+
+  <% if (!records.length) { %>
+    <div class="alert alert-warning">
+      There are no animals available.
     </div>
-    
-    <nav id ="pagination" class="d-none" aria-label="Animal List Navigation">
+  <% } else { %>
+
+    <!-- Pagination -->
+    <nav aria-label="Pagination">
       <ul class="pagination">
+
+        <!-- Previous Button -->
+        <li class="page-item <%= pagination.page === 1 ? 'disabled' : '' %>">
+          <a class="page-link" data-navigo href="#/search?page=<%= pagination.page - 1 %>&perPage=<%= pagination.perPage %>">Previous</a>
+        </li>
+
+        <!-- Page Numbers -->
+        <% for (let i = 1; i <= pagination.pages; i++) { %>
+          <li class="page-item <%= i === pagination.page ? 'active' : '' %>">
+            <a class="page-link" data-navigo href="#/search?page=<%= i %>&perPage=<%= pagination.perPage %>"><%= i %></a>
+          </li>
+        <% } %>
+
+        <!-- Next Button -->
+        <li class="page-item <%= pagination.page === pagination.pages ? 'disabled' : '' %>">
+          <a class="page-link" data-navigo href="#/search?page=<%= pagination.page + 1 %>&perPage=<%= pagination.perPage %>">Next</a>
+        </li>
+
       </ul>
     </nav>
 
-    <table id="animal-list" class="table table-striped d-none">
+    <!-- Table -->
+    <table class="table table-striped">
       <thead>
         <tr>
-          <th>Owner</th>
           <th>Details</th>
           <th>Controls</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <% records.forEach(animal => { %>
+          <tr>
+            <td><%= animal.toString() %></td>
+            <td>
+              <a data-navigo="" href="#/create?id=<%= animal.id %>" class="btn btn-primary mx-1">
+                <i class="fa-solid fa-edit"></i>
+              </a>
+              <button class="btn btn-danger" data-id="<%= animal.id %>">
+                <i class="fa-solid fa-times"></i>
+              </button>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
     </table>
-   </div>
-  
-  Modal -->
-  <!-- <div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Delete Animal</h5>
-        </div>
-        <div class="modal-body">
-          Are you sure?
-        </div>
-        <div class="modal-footer" id="confirmation">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-          <button id="delete-button" type="button" class="btn btn-danger">
-            Delete
-            <i id="x-icon" class="fa-solid fa-x"></i>
-            <i id="spin-delete-icon" class="d-none fa-solid fa-spinner fa-spin-pulse"></i>
-          </button>
-        </div>
+
+  <% } %>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="confirmationModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Animal</h5>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this animal?
+      </div>
+      <div class="modal-footer" id="confirmation">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+        <button id="delete-button" type="button" class="btn btn-danger">
+          Delete
+          <i id="x-icon" class="fa-solid fa-x"></i>
+          <i id="spin-delete-icon" class="d-none fa-solid fa-spinner fa-spin-pulse"></i>
+        </button>
       </div>
     </div>
-  </div> -->
+  </div>
+</div>

@@ -11,8 +11,8 @@ import Animal from "../models/Animal.js";
 export default new AnimalService();
 
 function AnimalService() {
-    this.host = 'https://inft2202.opentech.durhamcollege.org';
-    this.apikey = '4f3937b2-5cea-45ac-bac8-d0509585c07c';
+    this.host = 'http://localhost:3000';
+    //this.apikey = '4f3937b2-5cea-45ac-bac8-d0509585c07c';
 }
 
 AnimalService.prototype.getAnimals = async function(page = 1, perPage = 10) {

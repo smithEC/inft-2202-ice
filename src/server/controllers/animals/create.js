@@ -10,7 +10,7 @@ const rules = checkSchema({
         in: 'body',
         customSanitizer: {
             options:async (value)=>{
-                if(value =='courtney'){
+                if(value =='Connor'){
                     return value += 'is the best'
                 }
             }

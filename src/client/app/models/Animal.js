@@ -14,7 +14,7 @@ export default class Animal {
     }
 
     toString() {
-        return `<em>${this.name}</em> is a <em>${this.breed}</em> with <em>${this.eyes}</em> eyes, <em>${this.legs}</em> legs, and makes a <em>${this.sound}</em> sound.`;
+        return `${this.name} is a ${this.breed} with ${this.eyes} eyes, ${this.legs} legs, and makes a ${this.sound} sound.`;
     }
 
     toJSON() {
