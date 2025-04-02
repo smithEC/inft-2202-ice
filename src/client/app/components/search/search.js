@@ -13,7 +13,7 @@ async function initialize(route) {
 }
 
 function render(records, pagination) {
-    console.log("Animal IDs on this page:", records.map(a => a.id));
+    console.log("Animal IDs on this page:", records.map(a => a._id));
     const container = document.querySelector("#app");
     container.innerHTML = template({ records, pagination });
 
@@ -21,13 +21,12 @@ function render(records, pagination) {
     document.querySelectorAll(".btn-danger[data-id]").forEach(button => {
         button.addEventListener("click", (event) => {
             const id = button.getAttribute("data-id");
-            const animal = records.find(a => a.id == id);
-            onDeleteClick(animal)(event);
+            onDeleteClick(id)(event);
         });
     });
 }
 
-function onDeleteClick(animal) {
+function onDeleteClick(animalID) {
     return event => {
         const modalEl = document.getElementById('confirmationModal');
         const modal = new bootstrap.Modal(modalEl);
@@ -48,8 +47,8 @@ function onDeleteClick(animal) {
                 spinIcon.classList.remove('d-none');
                 confirmBtn.disabled = true;
 
-                await AnimalService.waitTho(3000); // optional delay
-                await AnimalService.deleteAnimal(animal);
+                await AnimalService.waitTho(500); // optional delay
+                await AnimalService.deleteAnimal(animalID);
 
                 window.location.reload();
             } catch (error) {

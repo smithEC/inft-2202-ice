@@ -29,7 +29,7 @@ class AnimalService{
     }
 
     async deleteAnimal(animalId) {
-        const deletedAnimal = await Animal.findOneAndDelete({ _id: animalId });
+        const deletedAnimal = await Animal.findOneAndDelete(animalId);
         return deletedAnimal;
     }
     async searchAnimals(page = 1, perPage = 3){

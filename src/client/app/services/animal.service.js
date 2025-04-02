@@ -157,12 +157,12 @@ AnimalService.prototype.updateAnimal = async function(animal) {
     }
 }
 
-AnimalService.prototype.deleteAnimal = async function(animal) {
-    const url = new URL(`/api/animals/${animal.id}`, this.host);
+AnimalService.prototype.deleteAnimal = async function(animalId) {
+    console.log(animalId);
+    const url = new URL(`/api/animals/${animalId}`, this.host);
 
     const headers = new Headers({
-        'Content-Type': 'application/json',
-        'apikey': this.apikey
+        'Content-Type': 'application/json'
     });
 
     const options = {
